@@ -5,7 +5,7 @@
 void leerCadena(char *cadena, int n){
     fgets(cadena,n,stdin);
     int len = strlen(cadena) - 1;
-    if(len >= 0 && cadena[len] == '\n') // ✅ MEJORADO: validación
+    if(len >= 0 && cadena[len] == '\n') 
         cadena[len]='\0';
 }
 //funcion para leer enteros con rango
@@ -24,7 +24,7 @@ int leerEnteroConRango(int min, int max){
     return num;
 }
 
-float leerFlotanteConRango(float min, float max){ // ✅ CORREGIDO: era "int"
+float leerFlotanteConRango(float min, float max){ 
     float num;
     int val;
     do{
@@ -55,8 +55,8 @@ int menu(){
     return opc;
 }
 
-// ============ FUNCIONES DE CLIENTE ============
-
+// Funciones de Cliente 
+// Registrar un nuevo cliente y validacion de ID unico
 void registrarCliente(){
     Cliente cliente;
     Cliente clientes[MAX_CLIENTES];
@@ -65,26 +65,25 @@ void registrarCliente(){
     printf("Ingrese el ID del cliente (1-999): ");
     int idBuscado = leerEnteroConRango(1,999);
     
-    // ✅ AGREGADO: Validar que el ID no exista
     for(int i = 0; i < count; i++){
         if(clientes[i].id == idBuscado){
             printf("ERROR: Ya existe un cliente con ese ID\n");
             return;
         }
     }
-    
+    // Asignar datos al nuevo cliente
     cliente.id = idBuscado;
     printf("Ingrese el nombre del cliente: ");
     leerCadena(cliente.nombre,20);
     printf("Ingrese la direccion del cliente: ");
     leerCadena(cliente.direccion,50);
     guardarCliente(&cliente);
-    printf("Cliente registrado exitosamente\n"); // ✅ AGREGADO: Feedback
+    printf("Cliente registrado exitosamente\n"); 
 }
-
+// Listar todos los clientes registrados
 void listarClientes(Cliente *clientes){
     int c = obtenerClientes(clientes);
-    if(c == 0){ // ✅ AGREGADO: Validación
+    if(c == 0){ 
         printf("No hay clientes registrados\n");
         return;
     }
@@ -99,7 +98,7 @@ void listarClientes(Cliente *clientes){
                                     clientes[i].direccion);
     }
 }
-
+// Guardar un nuevo cliente en el archivo clientes.dat
 void guardarCliente(Cliente *cliente){
     Cliente clientes[MAX_CLIENTES];
     int count = obtenerClientes(clientes);
@@ -110,46 +109,45 @@ void guardarCliente(Cliente *cliente){
     
     // Sobreescribir el archivo completo
     FILE *f;
-    f = fopen("clientes.dat","wb");
-    if (f==NULL)
+    f = fopen("clientes.dat","wb");//abre archivo en modo escritura binaria (wb)
+    if (f==NULL)//verifica si el archivo se abrio correctamente
     {
         printf("No se pudo abrir el archivo\n");
         return;
     }
-    fwrite(clientes,sizeof(Cliente),count,f);
+    fwrite(clientes,sizeof(Cliente),count,f);//escribe el arreglo completo en el archivo
     fclose(f);
 }
 
 int obtenerClientes(Cliente *clientes){
     FILE *f;
-    f = fopen("clientes.dat","rb");
+    f = fopen("clientes.dat","rb"); //Abre el archivo en modo lectura binaria (rb)
     if (f==NULL)
     {
-        return 0; // ✅ MEJORADO: No mostrar error si no existe
+        return 0; 
     }
-    int count = fread(clientes,sizeof(Cliente),MAX_CLIENTES,f); // ✅ CORREGIDO: era 5
+    int count = fread(clientes,sizeof(Cliente),MAX_CLIENTES,f);//fileread
     fclose(f);
     return count;
 }
 
-// ============ FUNCIONES DE PRODUCTO ============
-
+//Funciones de Producto
 void registrarProducto(){
     Producto producto;
     printf("Ingrese el nombre del producto: ");
     leerCadena(producto.nombre,50);
     printf("Ingrese el stock del producto: ");
-    producto.stock=leerEnteroConRango(0,10000); // ✅ MEJORADO: aumentado rango
+    producto.stock=leerEnteroConRango(0,10000);
     printf("Ingrese el precio del producto: ");
-    producto.precio = leerFlotanteConRango(0.01,100000); // ✅ MEJORADO: rango realista
+    producto.precio = leerFlotanteConRango(0.01,100000); 
     producto.activo=1;
-    guardarProducto(&producto); // ✅ AGREGADO: ¡Faltaba guardar!
-    printf("Producto registrado exitosamente\n"); // ✅ AGREGADO: Feedback
+    guardarProducto(&producto); 
+    printf("Producto registrado exitosamente\n"); 
 }
 
 void listarProductos(Producto *productos){
     int c = obtenerProductos(productos);
-    if(c == 0){ // ✅ AGREGADO: Validación
+    if(c == 0){ 
         printf("No hay productos registrados\n");
         return;
     }
@@ -162,7 +160,7 @@ void listarProductos(Producto *productos){
                                         productos[i].nombre,
                                         productos[i].stock,
                                         productos[i].precio,
-                                        productos[i].activo ? "Activo" : "Inactivo"); // ✅ MEJORADO
+                                        productos[i].activo ? "Activo" : "Inactivo"); 
     }
 }
 
@@ -183,14 +181,13 @@ int obtenerProductos(Producto *productos){
     f = fopen("productos.dat","rb");
     if (f==NULL)
     {
-        return 0; // ✅ MEJORADO: No mostrar error si no existe
+        return 0; 
     }
-    int count = fread(productos,sizeof(Producto),MAX_PRODUCTOS,f); // ✅ CORREGIDO: era 5
+    int count = fread(productos,sizeof(Producto),MAX_PRODUCTOS,f); 
     fclose(f);
     return count;
 }
 
-// ✅ AGREGADO: Función completa nueva
 void editarProducto(){
     Producto productos[MAX_PRODUCTOS];
     int count = obtenerProductos(productos);
@@ -216,9 +213,9 @@ void editarProducto(){
     productos[indice].activo = leerEnteroConRango(0, 1);
     
     // Reescribir todo el archivo con los cambios
-    FILE *f = fopen("productos.dat", "wb");
+    FILE *f = fopen("productos.dat", "wb");//abre archivo en modo escritura binaria (wb)
     if(f != NULL){
-        fwrite(productos, sizeof(Producto), count, f);
+        fwrite(productos, sizeof(Producto), count, f);//escribe el arreglo completo en el archivo
         fclose(f);
         printf("Producto actualizado exitosamente\n");
     } else {
@@ -226,9 +223,8 @@ void editarProducto(){
     }
 }
 
-// ============ FUNCIONES DE FACTURA ============
+// Funciones de Factura
 
-// ✅ AGREGADO: Función completa nueva
 void crearFactura(){
     Factura factura;
     Cliente clientes[MAX_CLIENTES];
@@ -290,7 +286,7 @@ void crearFactura(){
         productos[idxProd].stock -= cantidad;
         
         if(factura.numProd < MAX_ITEMS){
-            printf("\nAgregar otro producto? (1=Si / 2=No): ");
+            printf("\nAgregar otro producto? (1.-Si / 2.-No): ");
             continuar = leerEnteroConRango(1, 2);
         } else {
             printf("Limite de productos alcanzado\n");
@@ -299,8 +295,8 @@ void crearFactura(){
     }
     
     // Actualizar archivo de productos con nuevo stock
-    FILE *f = fopen("productos.dat", "wb");
-    if(f != NULL){
+    FILE *f = fopen("productos.dat", "wb");//abre archivo en modo escritura binaria (wb)
+    if(f != NULL){//verifica si el archivo se abrio correctamente
         fwrite(productos, sizeof(Producto), numProductos, f);
         fclose(f);
     }
@@ -326,7 +322,7 @@ void crearFactura(){
     printf("\nFactura creada exitosamente\n");
 }
 
-// ✅ AGREGADO: Función completa nueva
+// Listar todas las facturas registradas
 void listarFacturas(Factura *facturas){
     int c = obtenerFacturas(facturas);
     if(c == 0){
@@ -354,7 +350,7 @@ void listarFacturas(Factura *facturas){
     printf("\n========================================\n");
 }
 
-// ✅ AGREGADO: Función completa nueva
+
 void guardarFactura(Factura *factura){
     FILE *f;
     f = fopen("facturas.dat","ab");
@@ -367,7 +363,7 @@ void guardarFactura(Factura *factura){
     fclose(f);
 }
 
-// ✅ AGREGADO: Función completa nueva
+
 int obtenerFacturas(Factura *facturas){
     FILE *f;
     f = fopen("facturas.dat","rb");
