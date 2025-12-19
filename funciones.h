@@ -1,7 +1,7 @@
 // Definir límites máximos
-    #define MAX_CLIENTES 100
-    #define MAX_PRODUCTOS 100
-    #define MAX_FACTURAS 50
+    #define MAX_CLIENTES 10
+    #define MAX_PRODUCTOS 10
+    #define MAX_FACTURAS 5
     #define MAX_ITEMS 10
 
     typedef struct{
