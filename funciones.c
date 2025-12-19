@@ -54,7 +54,6 @@ int menu(){
     int opc = leerEnteroConRango(1,8);
     return opc;
 }
-
 // Funciones de Cliente 
 // Registrar un nuevo cliente y validacion de ID unico
 void registrarCliente(){
@@ -324,7 +323,7 @@ void crearFactura(){
 
 // Listar todas las facturas registradas
 void listarFacturas(Factura *facturas){
-    int c = obtenerFacturas(facturas);
+    int c = obtenerFacturas(facturas);// c guarda facturas
     if(c == 0){
         printf("No hay facturas registradas\n");
         return;
