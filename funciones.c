@@ -82,7 +82,7 @@ void registrarCliente(){
 }
 // Listar todos los clientes registrados
 void listarClientes(Cliente *clientes){
-    int c = obtenerClientes(clientes);
+    int c = obtenerClientes(clientes);//c guarda clientes
     if(c == 0){ 
         printf("No hay clientes registrados\n");
         return;
@@ -140,13 +140,13 @@ void registrarProducto(){
     producto.stock=leerEnteroConRango(0,10000);
     printf("Ingrese el precio del producto: ");
     producto.precio = leerFlotanteConRango(0.01,100000); 
-    producto.activo=1;
+    producto.activo=1;// Por defecto, el producto se registra como activo
     guardarProducto(&producto); 
     printf("Producto registrado exitosamente\n"); 
 }
-
+// Listar todos los productos registrados
 void listarProductos(Producto *productos){
-    int c = obtenerProductos(productos);
+    int c = obtenerProductos(productos);// c guarda productos
     if(c == 0){ 
         printf("No hay productos registrados\n");
         return;
@@ -163,19 +163,19 @@ void listarProductos(Producto *productos){
                                         productos[i].activo ? "Activo" : "Inactivo"); 
     }
 }
-
-void guardarProducto(Producto *producto){
-    FILE *f;
-    f = fopen("productos.dat","ab");
-    if (f==NULL)
-    {
-        printf("No se pudo abrir el archivo\n");
-        return;
+// Guardar un nuevo producto en el archivo productos.dat
+    void guardarProducto(Producto *producto){
+        FILE *f;
+        f = fopen("productos.dat","ab");//abre archivo en modo agregar binario ab
+        if (f==NULL)
+        {
+            printf("No se pudo abrir el archivo\n");
+            return;
+        }
+        fwrite(producto,sizeof(Producto),1,f);
+        fclose(f);
     }
-    fwrite(producto,sizeof(Producto),1,f);
-    fclose(f);
-}
-
+// Obtener todos los productos registrados desde el archivo
 int obtenerProductos(Producto *productos){
     FILE *f;
     f = fopen("productos.dat","rb");
@@ -187,7 +187,7 @@ int obtenerProductos(Producto *productos){
     fclose(f);
     return count;
 }
-
+// Editar un producto existente
 void editarProducto(){
     Producto productos[MAX_PRODUCTOS];
     int count = obtenerProductos(productos);
@@ -198,7 +198,7 @@ void editarProducto(){
     }
     
     listarProductos(productos);
-    printf("\nSeleccione el numero de producto a editar (0-%d): ", count-1);
+    printf("\nSeleccione el numero de producto a editar (0-%d): ", count-1);//elegir el producto a editar rango permitido
     int indice = leerEnteroConRango(0, count-1);
     
     printf("\n--- Editando: %s ---\n", productos[indice].nombre);
@@ -251,7 +251,7 @@ void crearFactura(){
     // Seleccionar cliente
     printf("\n--- CREAR NUEVA FACTURA ---\n");
     listarClientes(clientes);
-    printf("\nSeleccione el numero de cliente (0-%d): ", numClientes-1);
+    printf("\nSeleccione el numero de cliente (0-%d): ", numClientes-1);//elegir cliente rango permitido
     int idxCliente = leerEnteroConRango(0, numClientes-1);
     factura.cliente = clientes[idxCliente];
     
@@ -275,7 +275,7 @@ void crearFactura(){
         printf("Cantidad (disponible: %d): ", productos[idxProd].stock);
         int cantidad = leerEnteroConRango(1, productos[idxProd].stock);
         
-        // Agregar item a la factura
+        // Agregar item a la factura suma de stock
         factura.items[factura.numProd].producto = productos[idxProd];
         factura.items[factura.numProd].cantidad = cantidad;
         factura.items[factura.numProd].subtotal = cantidad * productos[idxProd].precio;
@@ -353,7 +353,7 @@ void listarFacturas(Factura *facturas){
 
 void guardarFactura(Factura *factura){
     FILE *f;
-    f = fopen("facturas.dat","ab");
+    f = fopen("facturas.dat","ab");//abre archivo en modo agregar binario (ab)
     if (f==NULL)
     {
         printf("No se pudo abrir el archivo\n");
@@ -366,7 +366,7 @@ void guardarFactura(Factura *factura){
 
 int obtenerFacturas(Factura *facturas){
     FILE *f;
-    f = fopen("facturas.dat","rb");
+    f = fopen("facturas.dat","rb");//Abre el archivo en modo lectura binaria (rb)
     if (f==NULL)
     {
         return 0;
