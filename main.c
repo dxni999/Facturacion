@@ -25,7 +25,7 @@ int main (int argc, char *argv[]) {
             registrarProducto();
             break;
         case 4:{
-            Producto productos[MAX_PRODUCTOS]; // 
+            Producto productos[MAX_PRODUCTOS];  
             listarProductos(productos);
             break;
         }
