@@ -5,9 +5,6 @@ int main (int argc, char *argv[]) {
 
     int opc1, opc2;
     
-    // Eliminar archivo de clientes al iniciar el programa
-    remove("clientes.dat");
-
     do{
         opc1 = menu();
 
@@ -42,7 +39,6 @@ int main (int argc, char *argv[]) {
         }
         case 8: 
             printf("\nGracias por usar el sistema. Hasta pronto!\n");
-            remove("clientes.dat");
             return 0;
         default:
             printf("Opcion no valida\n"); 
